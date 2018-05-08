@@ -1,0 +1,8 @@
+#!/bin/sh
+#  nomads yymmdd hh[gfs] hhh[forecasttime]
+curl -s "http://nomads.ncep.noaa.gov/cgi-bin/filter_gfs_0p25.pl?\
+file=gfs.t${2}z.pgrb2.0p25.f${3}&lev_1000_mb=on&lev_100_mb=on&lev_10_mb=on&\
+lev_250_mb=on&lev_30_mb=on&lev_500_mb=on&lev_850_mb=on&\
+var_UGRD=on&var_VGRD=on&leftlon=0&rightlon=360&toplat=90&bottomlat=-90&\
+dir=/gfs.${1}${2}" > tmp.grib2
+cdo -f nc copy tmp.grib2 tmp.nc

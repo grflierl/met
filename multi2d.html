@@ -1,0 +1,327 @@
+<html>
+<!-- see license.txt -->
+<link rel="stylesheet" type="text/css" href="black.css">
+<head>
+    <style>
+    .entry_results {
+    position:absolute;
+/*    left:88px;*/
+    left:9.6em;
+    }
+    .centry_results {
+    position:absolute;
+/*    left:244px;*/
+    left:24.7em;
+    }
+    </style>
+    <script src="entrysel3.js"></script>
+    <script src="selcities.js"></script>
+    <script>
+
+var expectedTime=0;
+
+function changePage(url){
+    window.location=url;
+}
+
+colors=[[255,255,255],[255,0,0],[255,165,0],[255,255,0],[0,255,0],[128,128,255],
+[75,0,130],[238,130,238]];
+pnts=new Array;
+var pntdata=[];
+
+function overlay(pg,j0){
+    pg.strokeWeight(1);
+    pg.stroke("#000000");
+    xy=parent.latlon2xy(parent.stdLocation[0],parent.stdLocation[1]);
+    pg.fill("#ffff00");
+    pg.ellipse(xy[0],xy[1],7,7);
+    xy=parent.latlon2xy(parent.common.origlat,parent.common.origlon);
+    pg.fill("#00ff00");
+    pg.triangle(xy[0]-8,xy[1]+5,xy[0]+8,xy[1]+5,xy[0],xy[1]-9);
+    xy=parent.latlon2xy(parent.common.destlat,parent.common.destlon);
+    pg.fill("#ff0000");
+    pg.triangle(xy[0]-8,xy[1]+5,xy[0]+8,xy[1]+5,xy[0],xy[1]-9);
+//    console.log("overlay "+pntdata.length);
+    n=pntdata.length/8;
+    for (k=0; k<8; k++){
+	pnts=[];
+	for (j=0;j<n;j++){
+	    ind=(k+j*8);
+	    lat=pntdata[ind][2];
+	    lon=pntdata[ind][3];
+	    pnts[j]=parent.latlon2xy(lat,lon);
+	};
+//	console.log(pnts.length," -- ",j0);
+	parent.drawPoints(pg,pnts.length-1,pnts,colors[k],false);
+    };
+    t=8.0/9.0*pnts.length;
+    for (j=t-7;j<=t;j++)
+	parent.drawClock(parent.cl_img,j,1);
+}
+
+function procdata(tdat){
+    d=tdat.d;
+    if(d[0][1] != expectedTime) return;
+    //    console.log(parent.common.mindist+" ? "+tdat.mindist);
+    if (tdat.mindist<parent.common.mindist){
+	parent.common.mindist=parent.rnd(tdat.mindist,10);
+	document.getElementById("mindate").innerHTML=parent.common.date+" plus "+tdat.mintrack+" days";
+	parent.common.mintime= parent.rnd(tdat.mintime-tdat.mintrack,10);
+    };
+    k0=pntdata.length;
+    for(k=0;k<d.length;k++)pntdata[k0+k]=d[k];
+//    console.log("procdata "+pntdata.length);
+//    parent.sphereOverlay=overlay;
+    parent.showSphere("single",null);
+    t0=pntdata[pntdata.length-1][1];
+    if(t0<16){
+	n=pntdata.length-8;
+	latlon="";
+	for(j=0;j<8;j++)
+	    latlon=latlon+pntdata[n+j][2]+","+pntdata[n+j][3]+",";
+	//        console.log(t0+" -> "+latlon);
+	expectedTime = t0;
+	getjson(t0,latlon);
+    };
+}
+
+    function getjson(t0,latlon){
+//	console.log("getjson "+latlon);
+    var xmlhttp = new XMLHttpRequest();
+    xmlhttp.onreadystatechange = function() {
+        if (xmlhttp.readyState == 4 && xmlhttp.status == 200) {
+            dat= xmlhttp.responseText;
+	    tdat=JSON.parse(dat);
+//	    console.log("here "+tdat.d);
+            procdata(tdat);
+        }
+    };
+    req="traj4multi2d.php?"+t0+","+parent.common.press+","+parent.common.destlat+","+parent.common.destlon+" "+latlon;
+;
+//    console.log(req);
+    xmlhttp.open("GET", req, true);
+    xmlhttp.send();
+}
+
+var pg=parent.pg;
+
+function launch(){
+    toggle("results",1);
+    setclick("orig");
+    parent.showSphere("single",null);
+    parent.common.imagePtr=129;
+    parent.nowDrawing=false;
+    latlon="";
+    for(j=0;j<8;j++)latlon=latlon+parent.common.origlat+","+parent.common.origlon+",";
+    parent.sphereOverlay=overlay;
+    parent.common.mindist=20000;
+    pntdata=[];
+    expectedTime=0;
+    getjson(0,latlon);
+}
+
+function fillin(params,common){
+    for (x in params){
+	targ=document.getElementById(x);
+	if(targ)targ.innerHTML=params[x];
+    };
+    for (x in common){
+	targ=document.getElementById(x);
+	if(targ)targ.innerHTML=common[x];
+    };
+}
+
+function init(){
+    if(parent.hires)
+	parent.showSphere("single","days/b1024.jpg");
+    else
+	parent.showSphere("single","days/b512.jpg");
+    parent.fillin=fillin;
+    parent.changePage=changePage;
+    parent.common.context="book2";
+    params.orig=parent.common.orig;
+    params.dest=parent.common.dest;
+    c=params.orig.split(", ");
+    document.getElementById("origcountry").value=c[0];
+    document.getElementById("origcity").value=c[1];
+    latlonfmt('origdisp_latlon',parent.common.origlat+" "+parent.common.origlon);
+    c=params.dest.split(", ");
+    document.getElementById("destcountry").value=c[0];
+    document.getElementById("destcity").value=c[1];
+    latlonfmt('destdisp_latlon',parent.common.destlat+" "+parent.common.destlon);
+    initEntries();
+    document.getElementById('date').innerHTML=parent.common.date;
+    setclick("orig");
+    parent.sphereClick=clickfill;
+    parent.hide("colorbar",true);
+}
+
+function finis(){
+    parent.fillin=null;
+    parent.sphereClick=null;
+    parent.changePage=null;
+    parent.sphereOverlay=null;
+}
+
+</script>
+
+	<!--style>
+	  table { border:1px solid white; }
+	  td { border:1px solid white; }
+	</style-->
+	<style>
+	td { height: 30px; }
+	input { width: 120; }
+	</style>
+
+</head>
+<body onload="init()" onunload="finis()">
+
+<h1>PLAN YOUR JOURNEY -- DEPARTURE DATES</h1>
+
+<p>
+<table style="width:100%">
+      <tr>
+	    <td><b>DEPARTING:</b></td>
+    <td style='width:240'> <a href='javascript:changePage("b1.html")'
+    style="text-decoration:none"> 
+<img src='check-off.png' width=20 height=20
+style='position:relative;top:2px'>&nbsp;Today (<span id="date"></span>)</a>
+    </td>
+    <td style='width:200'>
+        <img src='check-on.png' width=16 height=16 
+style='position:relative;top:2px'>&nbsp;Flexible date
+    </td>
+      </tr>
+  	<tr>
+		<td style="height:18px;padding-bottom:0px;padding-top:0px;"></td>
+		<td align="left" style="height:18px;padding-bottom:0px;padding-top:0px;"><b>&nbsp;COUNTRY&nbsp;&mdash;</b></td>
+		<td align="left" style="height:18p;padding-bottom:0px;padding-top:0px;"><b>&nbsp;CITY&nbsp;&mdash;</b></td>
+	</tr>
+      <tr>
+	<td><!--&#9658;&nbsp;--><b>FROM:</b></td>
+	<td>
+	  <input id="origcountry"
+		 style="color:white;background-color:#666666;font-size:0.9em"
+		 onkeyup="showHint(2)" autocomplete="off" value="" alt="2"
+		 size="12"
+		 onclick='resetx("origcountry");resetx("origcity");setclick("orig");return
+		 false'/>
+	</td>
+	<td>
+	  <input id="origcity"
+		 style="color:white;background-color:#666666;font-size:0.9em"
+		 onkeyup="showHint(3)" autocomplete="off" value="" alt="3"
+		 size="12" onclick='resetx("origcity");return false'/>
+	</td>
+	<td>
+	  <span id="origdisp_latlon" style="font-size:0.75em;margin-left:-70px"></span><br/>
+	</td>
+      </tr>
+  
+      <tr>
+	<td><!--&#9658;&nbsp;--><b>TO:</b></td>
+	<td>
+	  <input id="destcountry"
+		 style="color:white;background-color:#666666;font-size:0.9em"
+		 onkeyup="showHint(0)" autocomplete="off" value="" alt="0"
+		 size="12"
+		 onclick='resetx("destcountry");resetx("destcity");setclick("dest");return
+		 false'/>
+	</td>
+	<td>
+	  <input id="destcity"
+		 style="color:white;background-color:#666666;font-size:0.9em"
+		 onkeyup="showHint(1)" autocomplete="off" value="" alt="1" size="12"
+		 onclick='resetx("destcity");return false'/>
+	</td>
+	<td>
+	  <span id="destdisp_latlon" style="font-size:0.75em;margin-left:-70px"></span><br/>
+	</td>
+      </tr>
+<!--
+    </table>  
+    <div id="origcountry_results" class="entry_results" style="border:0 none red">
+    </div>
+    <div id="origcity_results" class="centry_results" style="border:0 none red;">
+    </div>
+    <div id="destcountry_results" class="entry_results" style="border:0 none red">
+    </div>
+    <div id="destcity_results" class="centry_results" style="border:0 none red">
+    </div>
+-->
+      <tr><td></td>
+	<td style="width:240;"><div id="origcountry_results" style="border:0 none red">
+	</div><div id="destcountry_results" style="border:0 none red">
+    </div></td>
+      <td style="width:200;">
+    <div id="origcity_results" style="border:0 none red;">
+    </div><div id="destcity_results" style="border:0 none red">
+    </div></td>
+    </tr>
+    </table>
+</p>
+
+<p>
+Click on globe to select locations or enter country and city.
+</p>
+
+<p>
+<b>SELECT FLOATING ALTITUDE</b> using the slider.  This mode calculates only
+fixed-altitude flight.
+</p>
+
+  <p> Changing wind speed and direction means departure time can significantly
+    affect the flight path. You will see eight trajectories starting from the
+    same spot, but launched on successive days.</p>
+
+<p>Color-coded by departure date:<br/>
+  today,
+ <span style='color:#ff0000'>tomorrow</span>,
+ <span style='color:#ffa500'>2 days</span>,
+ <span style='color:#ffff00'>3 days</span>,
+ <span style='color:#00ff00'>4 days</span>,
+ <span style='color:#8080ff'>5 days</span>,
+ <span style='color:#5b2082'>6 days</span>,
+ <span style='color:#ee82ee'>7 days</span>.
+  </p>
+
+<div id="results" style="display:none">
+<!--
+  <p>&nbsp;</p>
+  <hr/>
+-->
+  <h1>
+    YOUR TRIP
+  </h1>
+  <p>
+    <b>Flying at:</b> <span id='height'></span> km (<span id='press'></span>mb)
+  </p>
+  <p>
+    <b>Minimum distance to destination:</b> <span id='mindist'></span> km
+  </p>
+  <p>
+    <b>Best departure date:</b> <span id='mindate'></span>
+  </p>
+  <p>
+    <b>Flying time to closest point:</b> <span id='mintime'></span> days
+  </p>
+</div>
+
+<hr style="position:absolute;bottom:45;left:0;width:695"/>
+<span style="position:absolute;bottom:5;left:5">
+  <button class="bigbtn" onclick="launch()">LAUNCH !</button>
+</span>
+<span style="position:absolute;bottom:5;right:105">
+  <button class="btn" onclick='parent.gohome()'>HOME</button>
+</span>
+<span style="position:absolute;bottom:5;right:5">
+  <button class="btn" onclick='changePage(parent.menupage)'>MENU</button>
+</span>
+<!--
+<span style="position:absolute;bottom:5;right:5">
+  <button class="btn" onclick="launch()">LAUNCH!</button>
+</span>
+
+</body>
+</html>

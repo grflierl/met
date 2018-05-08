@@ -1,0 +1,45 @@
+#!/bin/sh
+cd $HOME/public_html/met/data
+date -u
+d=`date -u +%Y%m%d`
+#python getdata42t.py speed $d $1 || { echo gfs err;exit 1; }
+python getdatanomads.py $d $1 || { echo gfs err;exit 1; }
+echo trajairport42
+python trajairport0.py 1024
+python trajairport0.py 2048
+python trajairport42.py &
+date
+S=gfs-0010
+echo vecplt42 $S
+python vecplt42.py ${S#*-} $S/hspeed-0000.jpg map3.pbm $S/uv2048.png $S/uv1024.png
+S=gfs-0030
+echo vecplt42 $S
+python vecplt42.py ${S#*-} $S/hspeed-0000.jpg map3.pbm $S/uv2048.png $S/uv1024.png
+S=gfs-0100
+echo vecplt42 $S
+python vecplt42.py ${S#*-} $S/hspeed-0000.jpg map3.pbm $S/uv2048.png $S/uv1024.png
+S=gfs-0250
+echo vecplt42 $S
+python vecplt42.py ${S#*-} $S/hspeed-0000.jpg map3.pbm $S/uv2048.png $S/uv1024.png
+S=gfs-0500
+echo vecplt42 $S
+python vecplt42.py ${S#*-} $S/hspeed-0000.jpg map3.pbm $S/uv2048.png $S/uv1024.png
+S=gfs-0850
+echo vecplt42 $S
+python vecplt42.py ${S#*-} $S/hspeed-0000.jpg map3.pbm $S/uv2048.png $S/uv1024.png
+S=gfs-1000
+echo vecplt42 $S
+python vecplt42.py ${S#*-} $S/hspeed-0000.jpg map3.pbm $S/uv2048.png $S/uv1024.png
+
+wait
+cp -rp gfs.time gfs-* mov-* ..
+#cp -rp gfs.time gfs-* mov-* $HOME/public_html/met
+
+date -u
+echo push
+tar -cf - gfs.time gfs-*/s* gfs-*/*.npz gfs-*/uv1024* mov-*/uv1024-* |\
+ssh -i /home/glenn/.ssh/davos-aerocene.pem ubuntu@float.aerocene.org \
+ "cd public_html/met;tar -xf -"
+
+date -u
+# 10.5 +   + 5

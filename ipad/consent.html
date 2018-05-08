@@ -1,0 +1,60 @@
+<html>
+<!-- see license.txt -->
+<link rel="stylesheet" type="text/css" href="black.css">
+<head>
+  <script src="p5.min.js"></script>
+  <script src="p5.dom.min.js"></script>
+  <script>
+    var com=parent.common;
+//    function init(){
+//    console.log(com);
+//    }
+function postAjax(url, data, success) {
+    var params = Object.keys(data).map(
+    function(k){ return encodeURIComponent(k) + '=' +
+      encodeURIComponent(data[k]) } ).join('&');
+	
+    var xhr = window.XMLHttpRequest ? new XMLHttpRequest() : new ActiveXObject("Microsoft.XMLHTTP");
+    xhr.open('POST', url);
+    xhr.onreadystatechange = function() {
+    if (xhr.readyState>3 && xhr.status==200) { success(xhr.responseText); }
+    };
+    xhr.setRequestHeader('X-Requested-With', 'XMLHttpRequest');
+    xhr.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
+    xhr.send(params);
+    return xhr;
+    }
+
+
+    function arch_confirm(data){
+    document.getElementById("confirm").innerHTML=data;
+    }
+    
+    function archive(){
+    com['name']=document.getElementById('name').value;
+    com['comment']=document.getElementById('comment').value;
+    //console.log(com);
+    postAjax("archive.php",com,arch_confirm);
+    document.getElementById("confirm").innerHTML="Saving... (takes about 30 sec)";
+    }
+  </script>
+</head>
+<body>
+<h2>SAVE YOUR JOURNEY</h2>
+<p> Each imaginary Aerocene journey is an "air signature" that we can use to advocate the independence from fossil fuels.
+  </p> 
+<p>If you save your prediction, it will be added to our database of aerosolar signatures. By doing so, you consent to the publication of this data on the Aerocene website.  </p>
+<p> Your Name :
+  <input id="name" type="text"/>
+  </p>
+  <p>
+    Comments:<br/>
+    <textarea id="comment" rows=5 cols=40></textarea>
+  </p>
+  <p>
+    <button onclick="archive()">SAVE</button>
+  </p>
+  <p>
+    <span id="confirm"></span>
+</body>
+</html>

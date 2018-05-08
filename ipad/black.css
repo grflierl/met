@@ -1,0 +1,407 @@
+@font-face {
+  font-family: raleway-regular;
+  src: url(ralewayregular.otf);
+}
+
+@font-face {
+  font-family: raleway-semibold;
+  src: url(ralewaysemibold.otf);
+}
+
+body {
+  /* background-color:#0f1312; */
+  background-color: #14181a;
+  color: white;
+  font-family: raleway-regular;
+  font-size: 1em;
+  /*15px;*/
+  /*1em*/
+  padding-left: 10px;
+}
+
+input { font-size: 18px; }
+
+input:focus { font-size: 16px!important; }
+
+
+/*.prefacing html {
+  position:relative;
+  min-height:100%;
+}*/
+
+
+/*.prefacing body {*/
+
+
+/*Margin bottom by footer height */
+
+
+/*margin-bottom: 60px;*/
+
+
+/*}*/
+
+.footer {
+  position: fixed;
+  bottom: 0;
+  left: -5px;
+  width: 100%;
+  /*padding:2px;*/
+  /* Set the fixed height of the footer here */
+  height: 70px;
+  background-color: rgba(0, 0, 0, .5);
+  z-index: 1000;
+}
+
+.mainframe body {
+  color: magenta;
+  /* Hello world check */
+  padding: 0;
+  margin: 0;
+  background-image: url("stars.jpg");
+  background-size: cover;
+  /*background-repeat: no-repeat;*/
+}
+
+
+/*.adaptive body {
+    -webkit-overflow-scrolling:touch;
+    overflow:auto;
+    height:100%;
+    width:100%;
+}*/
+
+.boarder {
+  /*position:absolute;*/
+  /*bottom:45;*/
+  /*left:1%;*/
+  width: 100%;
+}
+
+.prefacing p {
+  padding-top: 4;
+  font-size: 1em;
+  line-height: 1.1;
+}
+
+.booking div.container {
+  padding-top: 0;
+  font-size: 0.85em;
+  line-height: 1.1;
+}
+
+.multiday div.container {
+  font-size:0.85em;
+  line-height: 1.1;
+}
+
+h3 {
+  font-family: raleway-semibold;
+  font-size: 1.0em;
+  letter-spacing: 0px;
+}
+
+h1 {
+  font-family: raleway-regular;
+  font-size: 1.5em;
+  letter-spacing: 1px;
+}
+
+a:link {
+  color: white;
+}
+
+a:visited {
+  color: #aaaaaa;
+}
+
+.btn {
+  background-color: #666666;
+  color: #ffffff;
+  font-size: 1.8em;
+  border: 0px;
+  padding: 5px;
+  padding-right: 12px;
+  padding-left: 12px;
+  /*margin-left:50;*/
+  z-index: 100;
+}
+
+.bigbtn {
+  background-color: #447744;
+  color: #ffffff;
+  font-size: 2em;
+  /*1.5em;*/
+  border: 0px;
+  padding-top: 4px;
+  padding-bottom: 4px;
+  padding-left: 40;
+  padding-right: 40;
+  z-index: 100;
+}
+
+.casting {
+  position: absolute;
+  bottom: 5;
+  left: 5;
+}
+
+.resetting {
+  position: absolute;
+  bottom: 5;
+  right: 140;
+}
+
+.expanding {
+  position: absolute;
+  bottom: 5;
+  right: 5;
+}
+
+.adaptive .navbtn {
+  position: absolute;
+  /*top:920;
+    left:1650;*/
+  bottom: 20px;
+  right: 20px;
+}
+
+b {
+  font-family: raleway-semibold;
+  font-size: 1.0em;
+  letter-spacing: 0px;
+}
+
+td {
+  height: 40px;
+  padding-left: 10px;
+  padding-right: 10px;
+  vertical-align: top;
+}
+
+th {
+  vertical-align: top;
+}
+
+.bannera .prjae {
+  /* font-size:6em;
+    font-weight:900;
+    letter-spacing:0px;*/
+  position: absolute;
+  right: 10;
+  width: 670;
+  height: 159;
+}
+
+.bannera .prjfocus {
+  position: absolute;
+  font-family: raleway-regular;
+  font-size: 25;
+  letter-spacing: 1px;
+  font-weight: 600;
+  top: 164;
+  right: 35;
+}
+
+.bannera .constraints {
+  position: absolute;
+  top: 208;
+  right: 36;
+  font-size: 16px;
+  /*font-weight:500;*/
+}
+
+.bannera .towards {
+  position: absolute;
+  top: 239;
+  right: 36;
+  font-size: 16px;
+  /*font-weight:500;*/
+}
+
+
+table, th, td {
+  border: 0px;
+  border-collapse: collapse;
+}
+
+th, td {
+  padding: 1px;
+}
+
+.mainframe div.extra {
+  position: absolute;
+}
+
+.mainframe iframe.bannerae {
+  border: 0px;
+}
+
+.mainframe div.ext {
+  position: absolute;
+  border: 0px;
+  overflow: hidden;
+}
+
+.mainframe iframe.contentf {
+  overflow: hidden;
+}
+
+.mainframe div.colorscale {
+  position: absolute;
+  top: 868;
+  left: 18;
+}
+
+
+
+
+@media all and (orientation: portrait) {
+  .adaptive body {
+    color: red;
+    /* Hello world check */
+  }
+  div.extra {
+    top: -5;
+    /*980*/
+    left: 25;
+    /*50*/
+  }
+  iframe.bannerae {
+    width: 1200;
+    /*1080;*/
+    /*1128;*/
+    height: 120;
+  }
+  div.ext {
+    top: 980;/*920;*/
+    /*1130;*/
+    left: 25;
+    width: 1200;
+    /*980;*/
+    /*1128;*/
+    /*height:460;*/
+    /*height: calc(100%-980px);*/
+  }
+  iframe.contentf {
+    width: 1200;
+    /*980;*/
+    /*1128;*/
+    /*height:;*/
+    /*height: auto;*/
+    /*42%;''*/
+    /*'';*/
+    /*height: '';*/ /*640*/
+    /*height:600;*/
+    height: 33%; /*33%;*/ /*37%*/
+    /*480*/
+    /*520*/
+    /*height:calc(100% - 1200px);*/
+  }
+}
+
+@media all and (orientation: landscape) {
+  .adaptive body {
+    color: green;
+    /* Hello world check */
+  }
+  div.extra {
+    top: 0;
+    left: 1140;
+  }
+  iframe.bannerae {
+    width: 700;
+    /*550;*/
+    height: 265;
+    /*250;*/
+  }
+  div.ext {
+    top: 275;
+    left: 1140;
+    width: 700;
+    overflow: hidden;
+    padding-right:100;
+  }
+  iframe.contentf {
+    width: 700;
+    height: 640;
+  }
+}
+
+
+
+@media all and (min-width: 450px) {
+  .bannera .prjae {
+    width: 670;
+    height: 141;
+    /*159;*/
+    right: 10;
+  }
+  .bannera .prjfocus {
+    /*font-size:1.5em;*/
+    top: 164;
+    right: 0;
+  }
+  .bannera .constraints {
+    top: 208;
+    right: 0;
+    font-size: 16px;
+  }
+  .bannera .towards {
+    top: 239;
+    right: 0;
+    font-size: 16px;
+  }
+  .bannera .only {
+    display: inline;
+  }
+  .prefacing p {
+    padding-top: 4; /*12*/
+    font-size: 1.7em;
+    line-height: 1.1;
+  }
+  .booking div.container {
+    font-size: 1.8em;
+  }
+  .multiday div.container {
+    font-size: 1.8em;
+  }
+}
+
+@media all and (min-width: 850px) {
+  .bannera .prjae {
+    width: 430;
+    height: 90;
+    /*102;*/
+    left: 10;
+  }
+  .bannera .prjfocus {
+    /*font-size:1.2em;*/
+    top: 20;
+    right: 10;
+  }
+  .bannera .constraints {
+    top: 60;
+    right: 10;
+    font-size: 16px;
+  }
+  .bannera .towards {
+    top: 90;
+    right: 10;
+    font-size: 16px;
+  }
+  .bannera .only {
+    /*display:none;*/
+  }
+  .prefacing p {
+    padding-top: 4; /*10*/
+    font-size: 1.8em;
+    line-height: 1.1; /*1.2*/
+  }
+  .booking div.container {
+   font-size:2.0em;
+  }
+  .multiday div.container {
+  font-size:2.0em;
+  }
+}

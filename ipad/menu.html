@@ -1,0 +1,140 @@
+<html>
+  <!-- see license.txt -->
+<head>
+<link rel="stylesheet" type="text/css" href="black.css">
+<script>
+function changePage(url){
+    window.location=url;
+}
+function init(){
+    parent.changePage=changePage;
+//    parent.changeMenu('menu4.1a.png');
+}
+
+function finis(){
+    parent.changePage=null;
+}
+function toggle(id){
+  cur=document.getElementById(id).style.display;
+  if(cur=="none"){
+     document.getElementById(id).style.display='';
+  } else {
+     document.getElementById(id).style.display='none';
+  };
+}
+
+</script>
+</head>
+<body onload="init()" onunload="finis()">
+    <a href='javascript:window.history.back()' style='text-decoration:none'>
+    <b style="font-size:2.5em">&larr;</b>
+    </a>
+
+    <h3>Contribute your journey to the archive</h3>
+    <ul>
+      <li><a href='http:consent.html'>
+	  Information you'd like to tell us</a></li>
+    </ul>
+
+    <h3>Help</h3>
+    <ul>
+      <li><a href='javascript:toggle("tilt")'>Tilting the globe</a></li>
+      <div id="tilt" style="display:none">
+	Tilt the globe by dragging with the mouse or your finger.
+      </div>
+      
+      <li><a href='javascript:toggle("rot")'>Setting it spinning</a></li>
+      <div id="rot" style="display:none">
+	You can set the globe rotating clockwise by clicking/ tapping in the
+	lower left corner outside of the globe but within a square
+	circumscribing it. For counter-clockwise rotation, use the lower
+	right corner.  The upper right corner will stop the rotation while
+	the upper left resets it to the home location (latitude 0, longitude
+	0 at the center).</br>
+	<!--	  <img src="key.png" width=200 height=200/> -->
+      </div>
+      
+      <li><a href='javascript:toggle("cit")'>Picking the origin and
+	  destination</a></li>
+      <div id="cit" style="display:none">
+	You can launch a balloon whenever you have latitudes and longitudes
+	showing for the origin and destination. The lighted triangle shows
+	which will be filled in if you click on the globe.  You can click
+	on a triangle to choose that item.  If you click on an entry box, it
+	will clear that and prepare for a new entry.  Typing the first few
+	letters will generally give you a set of options; you can click on
+	an option.  When there is only one choice, it will be filled in
+	(green coloring).  Clicking on the box allows you to start over.
+	Tab moves from box to box.
+      </div>
+      
+      <li>
+	<a href='javascript:toggle("hgt")'>Setting the flight height</a>
+      </li>
+      <div id="hgt" style="display:none">
+	On the height scale to the right of the globe, drag the balloon image
+	up or down.  The display changes to show 12 hr trajectories at that
+	height starting at the red dots.
+      </div>
+      
+      <li><a href='javascript:toggle("dp")'>Day/night vertical levels</a></li>
+      <div id="dp" style="display:none">
+	Solar balloons gain altitude during the day and lose it during the
+	night, since the infrared coming from the surface does not heat it
+	as effectively.  Clouds can also be a concern. In the trajectory
+	computations, we have simply let the balloon fall to the next lower
+	height at night and rise to to the height on the balloon slider
+	during the day.  Switch modes by clicking on the icon to the right
+	of the timeline, below the height slider.
+      </div>
+      
+    </ul>
+    
+<!--
+    <h3>Options</h3>
+    <ul>
+      <li>
+	<a href='javascript:changePage("multi2d.html")'>
+	  See the effects of different departure dates</a> from your selected
+	departure point
+      </li>
+      <li>
+	<a href='javascript:changePage("b1.html")'>
+	  Back to single trajectories</a>
+      </li>
+    </ul>
+    -->
+
+    <h3>About the project participants and sponsors</h3>
+    <ul>
+      <li><a href="http://synoptic.mit.edu/aerocene-collaboration" target="info">
+	  MIT Department of Earth, Atmospheric and Planetary Sciences and the
+	  Center for Art, Science &amp; Technology</a></li>
+
+      <li><a href="http://aerocene.org" target="info">
+	  Aerocene Project</a> </li>
+      <!--	<li><a href="http://arts.mit.edu/welcome/cast/about/" target="info">
+	  MIT 
+	  <li><a href="http://www.aerocene.org" target="info">
+	      Aerocene Foundation</a> </li>-->
+    </ul>
+
+    <h3>Resources</h3>
+    <ul>
+      <li><a href='javascript:toggle("data")'>Data source for wind
+	  forecast</a></li>
+      <div id="data" style="display:none">
+	The <a href='https://www.ncdc.noaa.gov/data-access/model-data/model-datasets/global-forcast-system-gfs'
+	  target='info'>Global
+	  Forecast System</a> produces current and forecast winds for 16
+	days ahead, covering the whole atmosphere.  The data includes many
+	other meteorological fields, as well.  We use the most recent
+	midnight or noon UTC data.
+      </div>
+      
+      <li><a href='http:get.php/eddies.mit.edu/~glenn/met/rem-menu.html'>
+	  Current weather information and movies</a></li>
+      
+    </ul>
+
+</html>

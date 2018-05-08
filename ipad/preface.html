@@ -1,0 +1,74 @@
+<html class="prefacing">
+   <!-- see license.txt -->
+   <link rel="stylesheet" type="text/css" href="black.css">
+   <head>
+      <script>
+         function changePage(url){
+             window.location=url;
+         }
+         
+         function book(){
+             parent.movierot=0;
+             parent.moviePlaying=false;
+             changePage("b1.html");
+         }
+         
+         function firstclick(x,z,lat,lon){
+             parent.sphereClick=book;
+             parent.showSphere("loop",parent.splash);
+         }
+         
+         function init(){
+               parent.changePage=changePage;
+         //      parent.common.context="initdesc";
+         //      parent.movierot=0;
+             parent.sphereClick=firstclick;
+         //    parent.setButton(book,"PLAN YOUR JOURNEY");
+         }
+         
+         function finis(){
+             parent.sphereClick=null;
+         //    parent.actionButton=null;
+             parent.changePage=null;
+         }
+         
+      </script>
+   </head>
+   <body onload="init()" onunload="finis()">
+      <div class="container">
+         <p>
+            Trajectory computations and visualizations by Glenn Flierl, Lodovica Illari,
+            Bill McKenna of the Department of Earth, Atmospheric and Planetary Sciences at
+            the Massachusetts Institute of Technology (MIT) in collaboration with
+            Tom&aacute;s Saraceno, Visiting Artist at the MIT Center for Art, Science
+            &amp; Technology (CAST).
+         </p>
+         <p>
+            Shown are 6-hour tracks for floating sculptures, computed using the 16 day
+            wind forecast data from the US NOAA Global Forecast System.
+         </p>
+         <p  style='padding-bottom:45px'>
+            To Aero-float is to travel in the air without burning fossil fuels, without
+            using solar panels or batteries, and without rare gases. Aerocene holds a
+            message of simplicity, creativity and cooperation for a world of tumultuous
+            geopolitical relations, reminding us of our symbiotic relationship with the
+            Earth and all its species. The Aerocene project is being developed by the
+            Aerocene Foundation, and invites us to shape a period of time, a new epoch.
+         </p>
+      </div>
+      <div class="footer">
+         <!-- <div class="container"> -->
+         <hr class="boarder"/>
+         <span class="casting">
+         <button class="bigbtn" onclick="book()">PLAN YOUR JOURNEY</button>
+         </span>
+         <span class="resetting">
+         <button class="btn" onclick='parent.window.location="index.html"'>HOME</button>
+         </span>
+         <span class="expanding">
+         <button class="btn" onclick='changePage(parent.menupage)'>MENU</button>
+         </span>
+         <!-- </div> -->
+      </div>
+   </body>
+</html>

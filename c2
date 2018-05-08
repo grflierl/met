@@ -1,0 +1,4 @@
+#!/bin/sh
+iso=`awk -F ',' -v c1="$1" '$1==c1{print $2}' iso3166.csv`
+awk -F '\t' -v c1=$iso 'c1==$9{print $3}' cities15000.dat | grep -i "^$2" |sort -u
+

@@ -1,0 +1,10 @@
+#!/bin/sh
+cc=`python closestcity.py $1 $2`
+co=${cc%,*}
+ci=${cc#*,}
+#echo $co
+#echo $ci
+iso=`awk -F ',' -v c1="$co" '$2==c1{print $1}' iso3166.csv`
+echo -n $iso
+echo -n ", "
+echo $ci

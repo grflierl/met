@@ -1,0 +1,113 @@
+<html>
+<!-- see license.txt -->
+<link rel="stylesheet" type="text/css" href="black.css">
+<head>
+    <style>
+    .entry_results {
+    position:absolute;
+    left:9.6em;
+    }
+    .centry_results {
+    position:absolute;
+    left:24.7em;
+    }
+    </style>
+    <script src="entrysel3.js"></script>
+    <script src="selcities.js"></script>
+    <script src="common.js"></script>
+   <script>
+
+function init(){
+    c=common.orig.split(", ");
+    document.getElementById("origcountry").value=c[0];
+    document.getElementById("origcity").value=c[1];
+    latlonfmt('origdisp_latlon',common.origlat+" "+common.origlon);
+    c=common.dest.split(", ");
+    document.getElementById("destcountry").value=c[0];
+    document.getElementById("destcity").value=c[1];
+    latlonfmt('destdisp_latlon',common.destlat+" "+common.destlon);
+    initEntries();
+}
+
+function finis(){
+    document.getElementById('origlat').value=rnd(common.origlat,10);
+    document.getElementById('origlon').value=rnd(common.origlon,10);
+    document.getElementById('destlat').value=rnd(common.destlat,10);
+    document.getElementById('destlon').value=rnd(common.destlon,10);
+}
+
+</script>
+</head>
+<body onload="init()" onunload="finis()">
+  <h1>SET DEFAULT LOCATION</h1>
+
+  <p>
+This will be the reference location (marked with an orange dot) and appearing
+as the starting point when the trajectory computation routine starts up.
+  </p>
+  <p>
+<form action='defaults.php' method="POST">
+    <table>
+      <tr>
+	<td><b>FROM:</b></td>
+	<td>
+	  <input id="origcountry" name="origcountry"
+		 style="color:white;background-color:#666666;font-size:0.9em"
+		 onkeyup="showHint(2)" autocomplete="off" value="" alt="2"
+		 size="12"
+		 onclick='resetx("origcountry");resetx("origcity");return
+		 false'/>
+	</td>
+	<td>
+	  <input id="origcity" name="origcity"
+		 style="color:white;background-color:#666666;font-size:0.9em"
+		 onkeyup="showHint(3)" autocomplete="off" value="" alt="3"
+		 size="12" onclick='resetx("origcity");return false'/>
+	</td>
+	<td>
+	  <span id="origdisp_latlon" style="font-size:0.75em"></span><br/>
+	</td>
+      </tr>
+  
+      <tr>
+	<td><b>TO:</b></td>
+	<td>
+	  <input id="destcountry" name="destcountry"
+		 style="color:white;background-color:#666666;font-size:0.9em"
+		 onkeyup="showHint(0)" autocomplete="off" value="" alt="0"
+		 size="12"
+		 onclick='resetx("destcountry");resetx("destcity");return
+		 false'/>
+	</td>
+	<td>
+	  <input id="destcity" name="destcity"
+		 style="color:white;background-color:#666666;font-size:0.9em"
+		 onkeyup="showHint(1)" autocomplete="off" value="" alt="1" size="12"
+		 onclick='resetx("destcity");return false'/>
+	</td>
+	<td>
+	  <span id="destdisp_latlon" style="font-size:0.75em"></span><br/>
+	</td>
+      </tr>
+      <tr>
+	<td></td>
+	<td><div id="origcountry_results" style="border:0 none red"></div>
+	  <div id="destcountry_results" style="border:0 none red"></div>
+	</td>
+	<td>
+	  <div id="origcity_results" style="border:0 none red;"></div>
+	  <div id="destcity_results" style="border:0 none red"></div>
+	</td>
+      </tr>
+    </table>
+
+  </p>
+<input type='hidden' id='origlat' name='origlat' value=''/>
+<input type='hidden' id='origlon' name='origlon' value=''/>
+<input type='hidden' id='destlat' name='destlat' value=''/>
+<input type='hidden' id='destlon' name='destlon' value=''/>
+
+<input type='submit' value='SET THIS AS DEFAULT' onclick='finis()'/>
+</form>
+</body>
+</html>

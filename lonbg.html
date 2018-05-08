@@ -1,0 +1,252 @@
+<html>
+  <!-- see license.txt -->
+  <!-- p5 is covered by the "GNU Lesser General Public License, Version 2.1
+     see https://github.com/processing/p5.js/blob/master/license.txt -->
+<head>
+    <script src="p5.min.js"></script>
+    <script src="p5.dom.min.js"></script>
+<style>
+  .btn {
+  background-color:#666666;
+  color:#ffffff;
+  font-size:1.2em;
+  border:0px;
+  }
+</style>
+</head>
+<body>
+<script>
+  /*
+    see license.txt
+  */
+var res=[1024,512];
+
+var hires=0;
+if(res[0]==1024){
+  var windImg="gfs-#/uv1024.png";
+  var base="gfs-#/speed-#.jpg";
+  var splash="mov-0250/uv1024-#.jpg";
+  var menupage="menu.html";
+} else {
+  hires=1;
+  var windImg="gfs-#/uv2048.png";
+  var base="gfs-#/hspeed-#.jpg";
+  var splash="mov-0250/uv2048-#.jpg";
+  var menupage="menuh.html";
+};
+
+var nImages=129;
+var nSphere=0;
+var nPoints=0;
+var currentFrame=0;
+var filename;
+img=new Array;
+windsPtr=130;
+singlePtr=129;
+dwellTime=16;
+
+pastTrips=new Array;
+for(k=0;k<4;k++) pastTrips[k]=[];
+currentTrip=3;
+
+stdLocation=[46.0+48.0/60.0,9.0+50.0/60.0];
+
+var params = {
+    destlat: 42.36,
+    destlon:  -71.06,
+    press: 250,
+    deltap: 0,
+    startday: 0,
+    numdays: 2,
+    lat: 46.8,
+    lon: 9.83,
+}
+
+function rnd(v,n){
+    return Math.round(v*n)/n;
+}
+</script>
+
+<script src="common.js"></script>
+<script src="sphere.js"></script>
+<script src="slider.js"></script>
+<script src="clock.js"></script>
+
+<script>
+var str; 
+function preload(){
+    str=loadStrings("gfs.time");
+    slider_img=loadImage(slider_img);
+    balloon_img=loadImage(balloon_img);
+    cl_img=loadImage(clock_img);
+}
+
+function setup() {
+    cvn=createCanvas(1150,980,WEBGL);
+    cvn.position(10,0);
+    ortho(-width/2,width/2,-height/2,height/2,-1000,1000);
+    pg = createGraphics(res[0],res[1]);
+    sl=createGraphics(100,768);
+    cl=createGraphics(513,30);
+    t0Sphere();
+    frameRate(8);
+    common.date=str[0].substr(11,10)+" "+str[0].substr(22,5)+"Z";
+    stdLocation=[common.origlat,common.origlon];
+    showSphere("loop",splash);
+}
+
+movierot=2*pi/129.0/8.0;
+function draw(){
+    switch(currentType){
+    case "loop":
+	if(nSphere<=currentFrame){
+	    if(nSphere<129)return;
+	    currentFrame=0;
+	};
+        if(movierot){
+            theta += movierot;
+            phi=-pi/4*sin(theta);
+        };
+//        background(50);
+	drawSphere(img[currentFrame],-1);
+	drawClock(cl_img,currentFrame,1);
+	if(dwellTime==0)
+           currentFrame++;
+        else
+           dwellTime--;
+	break;
+    case "std":
+	if(nSphere<=currentFrame)return;
+	drawSphere(img[currentFrame],currentFrame);
+	if(nPoints>0){
+	    if(nSphere>currentFrame+1 && nPoints>currentFrame+1){
+//                drawClock(cl_img,currentFrame,sol[currentFrame]);
+		currentFrame++;
+	    };
+	    drawClock(cl_img,currentFrame,sol[currentFrame]);
+	};
+        break;
+    case "single":
+        if(imageReady)
+           drawSphere(img[singlePtr],nImages);
+        else
+           drawSphere(null,null);
+        break;
+    case "movie":
+        if(imageReady) {
+    //           drawSphere(img[singlePtr],nImages);
+               drawSphere(img[singlePtr],-1);
+//           console.log("got here "+movieFrame);
+           imageReady=false;
+           loadSphere(++movieFrame);
+        } else
+           drawSphere(null,null);
+        break;
+    default:
+	drawSphere(img[common.imagePtr],nImages);
+    };
+    if (currentType != "loop")drawSlider(slider_img,balloon_img);
+    if(fillin)fillin(params,common);
+}
+
+var x0=0;
+var y0=0;
+var x00=0;
+var y00=0;
+
+function inBox(mx,my,b){
+    if (mx>b[0] && mx<b[2] && my>b[1] && my<b[3]) return true;
+    return false;
+}
+
+function mousePressed(){
+//    console.log(">> "+mouseX+", "+mouseY);						  
+    if(currentType == "loop") {
+          movierot=0;
+       };
+    x00=x0=mouseX;
+    y00=y0=mouseY;
+    return false;
+}
+
+function mouseDragged(){
+    msx=mouseX;msy=mouseY;
+    if (inBox(msx,msy,sliderBox)){
+	showSphere("saved",null); //common.level_index);
+	dragInSlider(msx,msy);
+	if (currentType == "loop") movierot=0;
+    } else if (inBox(msx,msy,sphereBox)){
+	dragInSphere(msx,msy);
+    };
+    return false;
+}
+
+function mouseReleased(){
+    msx=mouseX;msy=mouseY;
+//    console.log(">> "+msx+", "+msy);
+    if ((msx-x00)*(msx-x00)+(msy-y00)*(msy-y00)>16)return false;
+    if (inBox(msx,msy,sliderBox)){
+	showSphere("saved",null); //common.level_index);
+	dragInSlider(msx,msy);
+    } else if (inBox(msx,msy,sphereBox)){
+        if (currentType !="loop")
+            clickInSphere(msx,msy);
+	else {
+            showSphere("saved",null); //common.level_index);
+            changePage("b1.html");
+        };
+    };
+    return false;
+}
+
+/*
+function setdest(d,latlon){
+//    console.log(latlon);
+    ll=latlon.split(" ");
+    params.destlat=rnd(ll[0],10);
+    params.destlon=rnd(ll[1],10);
+    common.dest=d;
+}
+*/
+
+function hide(nm,fl){
+  if(fl)
+    document.getElementById(nm).style="display:none";
+  else
+    document.getElementById(nm).style="display:''";
+}
+
+function gohome(){
+  parent.window.location="index.html";
+}
+	
+// hooks
+var fillin=null;
+var changePage=null;
+var changeBanner=null;
+
+</script>
+<div style="position:absolute;top:0;left:1140">
+  <iframe src="banner.html" width=700 height=265 style="border:0px">
+  </iframe>
+</div>
+
+<div style="position:absolute;top:275;left:1140">
+  <iframe id="ifr" src="preface.html" width=700 height=680 style="border:0px">
+  </iframe>
+</div>
+
+<div style="position:absolute;top:908;left:18">
+  <img id="colorbar" src="colorbariv.png" width=269 height=54>
+</div>
+
+<!--
+<span style="position:absolute;top:920;left:1650">
+  <button class="btn" onclick='window.location="index.html"'>HOME</button>
+</span>
+<span style="position:absolute;top:920;left:1750">
+  <button class="btn" onclick='changePage("menu.html")'>MENU</button>
+</span>
+-->
+</body>
+</html>

@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html>
+<head>
+<style>
+  body {
+  background-image: url("stars.jpg");
+  background-repeat: no-repeat;
+  }
+  
+  div{
+    width: 1900px;
+    height: 1000px;
+    -ms-transform-origin: top left;
+    -webkit-transform-origin: top left;
+    transform-origin: top left;
+    -ms-transform: matrix(2,0, 0, 2, 0, 0); /* IE 9 */
+    -webkit-transform: matrix(2, 0, 0, 2, 0, 0); /* Safari */
+    transform: matrix(2, 0, 0, 2, 0, 0); /* Standard syntax */
+}
+
+</style>
+<script>
+    
+p=navigator.platform.split(" ");
+if (p[0]=="iPad")
+    location.replace("ipad/lo.html"); // iPad
+else if (p[0]=="iPhone")
+    location.replace("iphone/lo.html"); // iPhone
+else if (p[0]=="Linux" && p[1].indexOf("86")<0)
+    location.replace("android/lo.html");  // Android
+
+// default=desktop				       
+function init(){
+    scw=window.innerWidth/1940;
+    sch=window.innerHeight/1040;
+    if(sch<scw) sc=sch; else sc=scw;
+    m="matrix("+sc+",0,0,"+sc+",0,0)";
+    id=document.getElementById("content");
+    id.style["transform"]=m;
+    id.style["-ms-transform"]=m;
+    id.style["-webkit-transform"]=m;
+}
+</script>
+</head>
+<body onload="init()">
+
+<div id="content">
+<iframe src="lonbg.html" width=1900 height=1000 style="border:0px"></iframe>
+</div>
+</body>
+</html>

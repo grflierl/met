@@ -1,0 +1,260 @@
+<html class="booking">
+   <!-- see license.txt -->
+   <link rel="stylesheet" type="text/css" href="black.css">
+   <head>
+      <style>
+         .entry_results {
+         position:absolute;
+         left:9.6em;
+         }
+         .centry_results {
+         position:absolute;
+         left:24.7em;
+         }
+      </style>
+      <script src="entrysel3.js"></script>
+      <script src="selcities.js"></script>
+      <script>
+         function changePage(url){
+             window.location=url;
+         }
+         function launch(){
+         //    toggle("instr",0);
+             if(parent.common.deltap==0){
+               toggle("results",1);
+               toggle("results1",0);
+             } else {
+               toggle("results",0);
+               toggle("results1",1);
+             };
+             setclick("orig");
+             parent.relaunch();
+         }
+         
+         function fillin(params,common){
+             for (x in params){
+          targ=document.getElementById(x);
+          if(targ)targ.innerHTML=params[x];
+             };
+             for (x in common){
+          targ=document.getElementById(x);
+          if(targ)targ.innerHTML=common[x];
+             };
+             if (parent.common.deltap){
+          lev=parent.common.level_index;
+          nlev=lev-1*(lev>0);
+          document.getElementById("nheight").innerHTML=parent.z_level[nlev];
+          document.getElementById("npress").innerHTML=parent.p_level[nlev];
+             } else {
+          document.getElementById("height0").innerHTML=parent.common.height;
+          document.getElementById("press0").innerHTML=parent.common.press;
+          document.getElementById("mindist0").innerHTML=parent.common.mindist;
+          document.getElementById("mintime0").innerHTML=parent.common.mintime;
+             }; 
+         }
+         
+         function init(){
+             parent.fillin=fillin;
+             parent.changePage=changePage;
+             parent.common.context="book2";
+             params.orig=parent.common.orig;
+             params.dest=parent.common.dest;
+             c=params.orig.split(", ");
+             document.getElementById("origcountry").value=c[0];
+             document.getElementById("origcity").value=c[1];
+             latlonfmt('origdisp_latlon',parent.common.origlat+" "+parent.common.origlon);
+             c=params.dest.split(", ");
+             document.getElementById("destcountry").value=c[0];
+             document.getElementById("destcity").value=c[1];
+             latlonfmt('destdisp_latlon',parent.common.destlat+" "+parent.common.destlon);
+             initEntries();
+             document.getElementById('date').innerHTML=parent.common.date;
+             setclick("orig");
+             parent.sphereClick=clickfill;
+             parent.showSphere("saved",null);
+             parent.hide("colorbar",false);
+         //    parent.setButton(launch,"LAUNCH !");
+             if(parent.common.deltap==1)document.getElementById("dn").src="check-on.png";
+         }
+         
+         function finis(){
+             parent.fillin=null;
+             parent.sphereClick=null;
+             parent.changePage=null;
+         //    parent.actionButton=null;
+         }
+         
+         function toggledaynight(){
+             dp=1-parent.common.deltap;
+             parent.common.deltap=dp;
+         if(dp==1)document.getElementById("dn").src="check-on.png";
+         else document.getElementById("dn").src="check-off.png";
+         }
+         
+      </script>
+	<!--style>
+	  table { border:1px solid white; }
+	  td { border:1px solid white; }
+	</style-->
+	<style>
+	td { height: 30px; }
+	input { width: 120; }
+	</style>
+   </head>
+   <body onload="init()" onunload="finis()">
+      <div class="container">
+         <div id="results" style="display:none">
+            <!-- <p>&nbsp;</p> -->
+            <h1>
+               YOUR JOURNEY
+            </h1>
+            <p>
+               <b>Floating at</b> <span style='color:yellow'>
+               <span id='height0'></span> km (<span id='press0'></span>mb)</span>
+            </p>
+            <!-- <img src="daynight.png" width=161 height=66><br/> -->
+            <p>
+               <b>You came within</b> <span id='mindist0'></span> km of your destination
+               after floating <span id='mintime0'></span> days
+            </p>
+            <hr />
+         </div>
+         <div id="results1" style="display:none">
+            <!-- <p>&nbsp;</p> -->
+            <h1>
+               YOUR JOURNEY
+            </h1>
+            <p>
+               <b>Floating at</b> <span style='color:yellow'>Daytime:
+               <span id='height'></span> km (<span id='press'></span>mb)</span>;
+               <span style='color:#999999'>Night:
+               <span id='nheight'></span> km (<span id='npress'></span>mb)</span>
+            </p>
+            <!-- <img src="daynight.png" width=161 height=66><br/> -->
+            <p>
+               <b>You came within</b> <span id='mindist'></span> km of your destination
+               after floating <span id='mintime'></span> days
+            </p>
+            <hr />
+         </div>
+         <h1>PLAN YOUR JOURNEY</h1>
+         <div style="position:relative;top:-10px;">
+            Click on globe to select locations or enter info.
+         </div>
+         <!-- <p> -->
+      <table style="width:100%;">
+
+      <tr>
+	<td style="width:120px;"><b>DEPARTING:</b></td>
+	<td style='width:240'> <img src='check-on.png' width=16 height=16
+		  style='position:relative;top:2px'>&nbsp;Today
+		  (<span id="date"></span>)
+	</td>
+	<td style='width:200'>
+	  <a href='javascript:changePage("multi2d.html")' style="text-decoration:none">
+            <img src='check-off.png' width=16 height=16 
+		 style='position:relative;top:2px'>&nbsp;Flexible date</a>
+	</td>
+      </tr>
+  	<tr>
+		<td style="height:18px;padding-bottom:0px;padding-top:0px;"></td>
+		<td align="left" style="height:18px;padding-bottom:0px;padding-top:0px;"><b>&nbsp;COUNTRY&nbsp;&mdash;</b></td>
+		<td align="left" style="height:18p;padding-bottom:0px;padding-top:0px;"><b>&nbsp;CITY&nbsp;&mdash;</b></td>
+	</tr>
+      <tr>
+	<td style="width:120px;"><b>FROM:&nbsp;</b></td>
+	<td>
+	  <input id="origcountry"
+		 style="color:white;background-color:#666666;font-size:0.9em;"
+		 onkeyup="showHint(2)" autocomplete="off" value="" alt="2"
+		 size="12"
+		 onclick='resetx("origcountry");resetx("origcity");setclick("orig");return
+		 false'/>
+	</td>
+	<td>
+	  <input id="origcity"
+		 style="color:white;background-color:#666666;font-size:0.9em"
+		 onkeyup="showHint(3)" autocomplete="off" value="" alt="3"
+		 size="12" onclick='resetx("origcity");return false'/>
+	</td>
+	<td>
+	  <span id="origdisp_latlon" style="font-size:0.75em;margin-left:-70px"></span><br/>
+	</td>
+      </tr>
+       <tr>
+	<td style="width:120px;"><b>TO:&nbsp;</b></td>
+	<td>
+	  <input id="destcountry"
+		 style="color:white;background-color:#666666;font-size:0.9em"
+		 onkeyup="showHint(0)" autocomplete="off" value="" alt="0"
+		 size="12"
+		 onclick='resetx("destcountry");resetx("destcity");setclick("dest");return
+		 false'/>
+	</td>
+	<td>
+	  <input id="destcity"
+		 style="color:white;background-color:#666666;font-size:0.9em"
+		 onkeyup="showHint(1)" autocomplete="off" value="" alt="1" size="12"
+		 onclick='resetx("destcity");return false'/>
+	</td>
+	<td>
+	  <span id="destdisp_latlon" style="font-size:0.75em;margin-left:-70px"></span><br/>
+	</td>
+      </tr>
+
+<!--
+    </table>  
+    <div id="origcountry_results" class="entry_results" style="border:0 none red">
+    </div>
+    <div id="origcity_results" class="centry_results" style="border:0 none red;">
+    </div>
+    <div id="destcountry_results" class="entry_results" style="border:0 none red">
+    </div>
+    <div id="destcity_results" class="centry_results" style="border:0 none red">
+    </div>
+-->
+      <tr><td></td>
+	<td style="width:240px;"><div id="origcountry_results" style="border:0 none red">
+	</div><div id="destcountry_results" style="border:0 none red">
+    </div></td>
+      <td style="width:200px;">
+    <div id="origcity_results" style="border:0 none red;">
+    </div><div id="destcity_results" style="border:0 none red">
+    </div></td>
+    </tr>
+    </table>
+         <!-- </p> -->
+         <div style="position:relative;top:10px;">
+            <a href='javascript:toggledaynight()' style='text-decoration:none'>
+             <img src='check-off.png' id='dn' width=24 height=24 style='position:relative;top:2px'>
+              <b>ACTIVATE DAY-NIGHT CYCLE</b>
+            </a>
+            Aerocene sculptures rise in the day by gathering heat from the sun, float lower at night when only warmed by infrared from below.
+         </div>
+         <div id="dePad" style="position:relative;top:20px;padding-bottom:70px;">
+            <b>SELECT FLOATING ALTITUDE</b> using the slider.  This is the maximum height
+            under a day-night cycle.
+         </div>
+      </div>
+      <div class="footer">
+         <!-- <div class="container"> -->
+         <hr class="boarder" />
+         <span class="casting">
+         <button class="bigbtn" onclick="launch();window.scrollTo(0, 1);">LAUNCH !</button>
+  <button class="btn" onclick="changePage('consent.html')">SAVE</button>
+         </span>
+         <span class="resetting">
+         <button class="btn" onclick='parent.window.location="index.html"'>HOME</button>
+         </span>
+         <span class="expanding">
+         <button class="btn" onclick='changePage(parent.menupage)'>MENU</button>
+         </span>
+         <!-- </div> -->
+      </div>
+      <!--
+         <span style="position:absolute;bottom:5;right:5">
+           <button class="btn" onclick="launch()">LAUNCH!</button>
+         </span>
+         -->  
+   </body>
+</html>

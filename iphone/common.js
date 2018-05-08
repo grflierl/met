@@ -1,0 +1,17 @@
+var common = {
+    height: 10,
+    level_index: 3,
+    mindist: 10000,
+    mintime: 0,
+    date: "",
+    context:"initmovie",
+    orig:"Switzerland, Davos",
+    origlat: 46.8,
+    origlon: 9.83,
+    dest:"United States, Boston",
+    destlat: 42.4,
+    destlon: -71.1,
+    imagePtr: 133,
+    press: 250,
+    deltap: 0,
+}
